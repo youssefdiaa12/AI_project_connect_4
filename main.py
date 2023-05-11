@@ -223,7 +223,6 @@ screen = pygame.display.set_mode(size)
 draw_board(board)
 pygame.display.update()
 myfont = pygame.font.SysFont("monospace", 75)
-
 turn = random.randint(PLAYER, AI)
 while not game_over:
     for event in pygame.event.get():
@@ -256,7 +255,7 @@ while not game_over:
         # col = pick_best_move(board, AI_PIECE)
         col, minimax_score = minimax(board, 4, True)
         if is_valid_location(board, col):
-            pygame.time.wait(500)
+            pygame.time.wait(700)
             row = get_next_open_row(board, col)
             drop_piece(board, row, col, PLAYER_PIECE)
             if wining_move(board, PLAYER_PIECE):
@@ -270,10 +269,10 @@ while not game_over:
     # Ask for Player 2 Input
     if turn == AI and not game_over:
         # col= random.randint(0,COLUMN_COUNT-1)
-        # col = pick_best_move(board, AI_PIECE)
-        col, minimax_score = minimax(board, 3, True)
+        col = pick_best_move(board, AI_PIECE)
+        #col, minimax_score = minimax(board, 3 , True)
         if is_valid_location(board, col):
-            pygame.time.wait(500)
+            pygame.time.wait(700)
             row = get_next_open_row(board, col)
             drop_piece(board, row, col, AI_PIECE)
             if wining_move(board, AI_PIECE):
