@@ -86,7 +86,9 @@ def evaluate_window(window, piece):
         score += 2
 
     if window.count(opp_piece) == 3 and window.count(EMPTY) == 1:
-        score -= 4
+        score -= 100
+    elif window.count(opp_piece) == 2 and window.count(EMPTY) == 2:
+        score -= 5
 
     return score
 
@@ -168,6 +170,49 @@ def minimax(board, depth, maximizing_player):
                 value = new_score
                 column = col
         return column, value
+def minimax_alpha_beta(board, depth, alpha, beta, maximizing_player):
+    valid_locations = get_valid_locations(board)
+    is_terminal = terminal_node(board)
+    if depth == 0 or is_terminal:
+        if is_terminal:
+            if wining_move(board, AI_PIECE):
+                return None, 100000000000000
+            elif wining_move(board, PLAYER_PIECE):
+                return None, -10000000000000
+            else:
+                return None, 0
+        else:
+            return None, score_position(board, AI_PIECE)
+    if maximizing_player:
+        value = -math.inf
+        column = random.choice(valid_locations)
+        for col in valid_locations:
+            row = get_next_open_row(board, col)
+            temp_board = board.copy()
+            drop_piece(temp_board, row, col, AI_PIECE)
+            new_score = minimax_alpha_beta(temp_board, depth - 1, alpha, beta, False)[1]
+            if new_score > value:
+                value = new_score
+                column = col
+            alpha = max(alpha, value)
+            if alpha >= beta:
+                break
+        return column, value
+    else:
+        value = math.inf
+        column = random.choice(valid_locations)
+        for col in valid_locations:
+            row = get_next_open_row(board, col)
+            temp_board = board.copy()
+            drop_piece(temp_board, row, col, PLAYER_PIECE)
+            new_score = minimax_alpha_beta(temp_board, depth - 1, alpha, beta, True)[1]
+            if new_score < value:
+                value = new_score
+                column = col
+            beta = min(beta, value)
+            if alpha >= beta:
+                break
+        return column, value
 
 
 def get_valid_locations(board):
@@ -214,6 +259,7 @@ def draw_board(board):
 
 
 pygame.init()
+ok=0
 SQUARESIZE = 100
 width = COLUMN_COUNT * SQUARESIZE
 height = (ROW_COUNT + 1) * SQUARESIZE
@@ -253,7 +299,8 @@ while not game_over:
     if turn == PLAYER and not game_over:
         # col= random.randint(0,COLUMN_COUNT-1)
         # col = pick_best_move(board, AI_PIECE)
-        col, minimax_score = minimax(board, 4, True)
+        #col, minimax_score = minimax(board, 3 , True)
+        col, minimax_score = minimax_alpha_beta(board, 3, -math.inf, math.inf, True)
         if is_valid_location(board, col):
             pygame.time.wait(700)
             row = get_next_open_row(board, col)
@@ -270,7 +317,7 @@ while not game_over:
     if turn == AI and not game_over:
         # col= random.randint(0,COLUMN_COUNT-1)
         col = pick_best_move(board, AI_PIECE)
-        #col, minimax_score = minimax(board, 3 , True)
+        # col, minimax_score = minimax(board, 3 , True)
         if is_valid_location(board, col):
             pygame.time.wait(700)
             row = get_next_open_row(board, col)
