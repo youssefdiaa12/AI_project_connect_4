@@ -15,7 +15,29 @@ AI_PIECE = 2
 
 EMPTY = 0
 WINDOW_LENGTH = 4
+choice=0
 depth_level=0
+# GUI setup
+pygame.init()
+SQUARESIZE = 100
+width = COLUMN_COUNT * SQUARESIZE
+height = (ROW_COUNT + 1) * SQUARESIZE
+size = (width, height)
+RADIUS = int(SQUARESIZE / 2 - 5)
+screen = pygame.display.set_mode(size)
+myfont = pygame.font.SysFont("monospace", 20)
+# Get the depth level from the user in the GUI
+while not 1 <= choice <= 2:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.unicode.isnumeric():
+                choice = int(event.unicode)
+    screen.fill((255, 255, 255))
+    label = myfont.render("Enter 1 for minimax or 2 for minimax_alpha&beta:", 1, (0, 0, 0))
+    screen.blit(label, (20, 10))
+    pygame.display.update()
 # GUI setup
 pygame.init()
 SQUARESIZE = 100
@@ -321,7 +343,10 @@ while not game_over:
         # col= random.randint(0,COLUMN_COUNT-1)
         # col = pick_best_move(board, AI_PIECE)
         #col, minimax_score = minimax(board, 3 , True)
-        col, minimax_score = minimax_alpha_beta(board, depth_level, -math.inf, math.inf, True)
+        if choice==1:
+            col, minimax_score = minimax(board, depth_level, True)
+        else:
+           col, minimax_score = minimax_alpha_beta(board, depth_level, -math.inf, math.inf, True)
         if is_valid_location(board, col):
             pygame.time.wait(700)
             row = get_next_open_row(board, col)
