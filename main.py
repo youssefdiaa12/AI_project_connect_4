@@ -17,49 +17,170 @@ EMPTY = 0
 WINDOW_LENGTH = 4
 choice=0
 depth_level=0
+import pygame
+import sys
+
+import pygame
+import sys
+
 # GUI setup
 pygame.init()
 SQUARESIZE = 100
-width = COLUMN_COUNT * SQUARESIZE
-height = (ROW_COUNT + 1) * SQUARESIZE
+width = 400
+height = 200
 size = (width, height)
 RADIUS = int(SQUARESIZE / 2 - 5)
 screen = pygame.display.set_mode(size)
 myfont = pygame.font.SysFont("monospace", 20)
-# Get the depth level from the user in the GUI
+
+# Define message and button parameters
+msg = "Choose an algorithm:"
+msg_label = myfont.render(msg, 1, (0, 0, 0))
+msg_x = int(width / 2 - msg_label.get_width() / 2)
+msg_y = int(height / 4 - msg_label.get_height() / 2)
+
+button_width = 120
+button_height = 30
+button_x_1 = int(width / 4 - button_width / 2)
+button_x_2 = int(3 * width / 4 - button_width / 2)
+button_y = int(height / 2 - button_height / 2)
+button_color = (255, 0, 0)
+
+# Define button labels
+button_label_1_text = "Minimax"
+button_label_1 = myfont.render(button_label_1_text, 1, (255, 255, 255))
+button_label_x_1 = int(button_x_1 + button_width / 2 - button_label_1.get_width() / 2)
+button_label_y = int(button_y + button_height / 2 - button_label_1.get_height() / 2)
+
+
+button_label_2_text = "Alpha-Beta Minimax"
+button_label_2 = myfont.render(button_label_2_text, 1, (255, 255, 255))
+button_label_x_2 = int(button_x_2 + button_width / 2 - button_label_2.get_width() / 2)
+
+# Display the message and buttons
+screen.fill((255, 255, 255))
+screen.blit(msg_label, (msg_x, msg_y))
+
+pygame.draw.rect(screen, button_color, (button_x_1, button_y, button_width, button_height))
+screen.blit(button_label_1, (button_label_x_1, button_label_y))
+
+pygame.draw.rect(screen, button_color, (button_x_2, button_y, button_width, button_height))
+screen.blit(button_label_2, (button_label_x_2, button_label_y))
+
+pygame.display.update()
+
+# Get the user's choice in the GUI
 while not 1 <= choice <= 2:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        elif event.type == pygame.KEYDOWN:
-            if event.unicode.isnumeric():
-                choice = int(event.unicode)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if button_x_1 <= mouse_x <= button_x_1 + button_width and button_y <= mouse_y <= button_y + button_height:
+                choice = 1
+            elif button_x_2 <= mouse_x <= button_x_2 + button_width and button_y <= mouse_y <= button_y + button_height:
+                choice = 2
+
+    # Update the button colors to indicate the current choice
+    button_color_1 = (0, 255, 0) if choice == 1 else (255, 0, 0)
+    button_color_2 = (0, 255, 0) if choice == 2 else (255, 0, 0)
     screen.fill((255, 255, 255))
-    label = myfont.render("Enter 1 for minimax or 2 for minimax_alpha&beta:", 1, (0, 0, 0))
-    screen.blit(label, (20, 10))
+    screen.blit(msg_label, (msg_x, msg_y))
+    pygame.draw.rect(screen, button_color_1, (button_x_1, button_y, button_width, button_height))
+    screen.blit(button_label_1, (button_label_x_1, button_label_y))
+    pygame.draw.rect(screen, button_color_2, (button_x_2, button_y, button_width, button_height))
+    screen.blit(button_label_2, (button_label_x_2, button_label_y))
     pygame.display.update()
 # GUI setup
 pygame.init()
 SQUARESIZE = 100
-width = COLUMN_COUNT * SQUARESIZE
-height = (ROW_COUNT + 1) * SQUARESIZE
+width = 6 * SQUARESIZE
+height = 2 * SQUARESIZE
 size = (width, height)
 RADIUS = int(SQUARESIZE / 2 - 5)
 screen = pygame.display.set_mode(size)
 myfont = pygame.font.SysFont("monospace", 45)
+# Define button parameters
+button_width = 80
+button_height = 30
+button_x_1 = int(width / 8 - button_width / 2)
+button_x_2 = int(3 * width / 8 - button_width / 2)
+button_x_3 = int(5 * width / 8 - button_width / 2)
+button_x_4 = int(7 * width / 8 - button_width / 2)
+button_y = int(height / 2 - button_height / 2)
+button_color = (255, 0, 0)
+
+# Define button labels
+button_label_1_text = "1"
+button_label_1 = myfont.render(button_label_1_text, 1, (255, 255, 255))
+button_label_x_1 = int(button_x_1 + button_width / 2 - button_label_1.get_width() / 2)
+button_label_y = int(button_y + button_height / 2 - button_label_1.get_height() / 2)
+
+button_label_2_text = "2"
+button_label_2 = myfont.render(button_label_2_text, 1, (255, 255, 255))
+button_label_x_2 = int(button_x_2 + button_width / 2 - button_label_2.get_width() / 2)
+
+button_label_3_text = "3"
+button_label_3 = myfont.render(button_label_3_text, 1, (255, 255, 255))
+button_label_x_3 = int(button_x_3 + button_width / 2 - button_label_3.get_width() / 2)
+
+button_label_4_text = "4"
+button_label_4 = myfont.render(button_label_4_text, 1, (255, 255, 255))
+button_label_x_4 = int(button_x_4 + button_width / 2 - button_label_4.get_width() / 2)
+
+# Display the message and buttons
+screen.fill((255, 255, 255))
+label = myfont.render("Enter depth level:", 1, (0, 0, 0))
+screen.blit(label, (20, 10))
+
+pygame.draw.rect(screen, button_color, (button_x_1, button_y, button_width, button_height))
+screen.blit(button_label_1, (button_label_x_1, button_label_y))
+
+pygame.draw.rect(screen, button_color, (button_x_2, button_y, button_width, button_height))
+screen.blit(button_label_2, (button_label_x_2, button_label_y))
+
+pygame.draw.rect(screen, button_color, (button_x_3, button_y, button_width, button_height))
+screen.blit(button_label_3, (button_label_x_3, button_label_y))
+
+pygame.draw.rect(screen, button_color, (button_x_4, button_y, button_width, button_height))
+screen.blit(button_label_4, (button_label_x_4, button_label_y))
+
+pygame.display.update()
 
 # Get the depth level from the user in the GUI
 while not 1 <= depth_level <= 4:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        elif event.type == pygame.KEYDOWN:
-            if event.unicode.isnumeric():
-                depth_level = int(event.unicode)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if button_x_1 <= mouse_x <= button_x_1 + button_width and button_y <= mouse_y <= button_y + button_height:
+                depth_level = 1
+            elif button_x_2 <= mouse_x <= button_x_2 + button_width and button_y <= mouse_y <= button_y + button_height:
+                depth_level = 2
+            elif button_x_3 <= mouse_x <= button_x_3 + button_width and button_y <= mouse_y <= button_y + button_height:
+                depth_level = 3
+            elif button_x_4 <= mouse_x <= button_x_4 + button_width and button_y <= mouse_y <= button_y + button_height:
+                depth_level = 4
+
+    # Update the button colors to indicate the current choice
+    button_color_1 = (0, 255, 0) if depth_level == 1 else (255, 0, 0)
+    button_color_2 = (0, 255, 0) if depth_level == 2 else (255, 0, 0)
+    button_color_3 = (0, 255, 0) if depth_level == 3 else (255, 0, 0)
+    button_color_4 = (0, 255, 0) if depth_level == 4 else (255, 0, 0)
     screen.fill((255, 255, 255))
-    label = myfont.render("Enter depth level (1-4):", 1, (0, 0, 0))
+    label = myfont.render("Enter depth level:", 1, (0, 0, 0))
     screen.blit(label, (20, 10))
+    pygame.draw.rect(screen, button_color_1, (button_x_1, button_y, button_width, button_height))
+    screen.blit(button_label_1, (button_label_x_1, button_label_y))
+    pygame.draw.rect(screen, button_color_2, (button_x_2, button_y, button_width, button_height))
+    screen.blit(button_label_2, (button_label_x_2, button_label_y))
+    pygame.draw.rect(screen, button_color_3, (button_x_3, button_y, button_width, button_height))
+    screen.blit(button_label_3, (button_label_x_3, button_label_y))
+    pygame.draw.rect(screen, button_color_4, (button_x_4, button_y, button_width, button_height))
+    screen.blit(button_label_4, (button_label_x_4, button_label_y))
     pygame.display.update()
+
 def create_board():
     board = np.zeros((6, 7))
     return board
