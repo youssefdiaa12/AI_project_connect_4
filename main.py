@@ -422,8 +422,8 @@ def draw_board(board):
     pygame.display.update()
 
 def isBoardFull(board):
-    for i in range(rowNum):
-        for j in range(colNum):
+    for i in range(ROW_COUNT):
+        for j in range(COLUMN_COUNT):
             if board[i][j] == EMPTY:
                 return False
     return True
@@ -443,42 +443,19 @@ while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        # if event.type == pygame.MOUSEMOTION:
-        #   pygame.draw.rect(screen, (0, 0, 0), (0, 0, width, SQUARESIZE))
-        #  posx = event.pos[0]
-        # if turn == PLAYER:
-        #    pygame.draw.circle(screen, (255, 0, 0),
-        #                      (posx, int(SQUARESIZE / 2)), RADIUS)
 
         pygame.display.update()
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #   print(event.pos)
-        # Ask for Player 1 Input
-        #  if turn == PLAYER:
-        #     posx = event.pos[0]
-        #    col = posx // SQUARESIZE
-        #   if is_valid_location(board, col):
-        #      row = get_next_open_row(board, col)
-        #     drop_piece(board, row, col, PLAYER_PIECE)
-        #    if wining_move(board, PLAYER_PIECE):
-        #       label = myfont.render(
-        #          "Player 1 Wins!!!", 1, (255, 0, 0))
-        #     screen.blit(label, (40, 10))
-        #    game_over = True
+
     if turn == PLAYER and not game_over:
-        # col= random.randint(0,COLUMN_COUNT-1)
-        # col = pick_best_move(board, AI_PIECE)
-        #col, minimax_score = minimax(board, 3 , True)
-        if choice==1:
+        if choice == 1:
             col, minimax_score = minimax(board, depth_level, True)
         else:
-           col, minimax_score = minimax_alpha_beta(board, depth_level, -math.inf, math.inf, True)
+            col, minimax_score = minimax_alpha_beta(board, depth_level, -math.inf, math.inf, True)
         if isBoardFull(board):
             label = myfont.render("Tie Game!!!", 1, (0, 255, 0))
             screen.blit(label, (40, 10))
             game_over = True
-
-        if is_valid_location(board, col):
+        elif is_valid_location(board, col):
             pygame.time.wait(700)
             row = get_next_open_row(board, col)
             drop_piece(board, row, col, PLAYER_PIECE)
@@ -486,32 +463,28 @@ while not game_over:
                 label = myfont.render("Player 1 Wins!!!", 1, (255, 0, 0))
                 screen.blit(label, (40, 10))
                 game_over = True
-
         turn = 1
         print_board(board)
         draw_board(board)
+
     # Ask for Player 2 Input
     if turn == AI and not game_over:
-        # col= random.randint(0,COLUMN_COUNT-1)
         col = pick_best_move(board, AI_PIECE)
-        # col, minimax_score = minimax(board, 3 , True)
         if isBoardFull(board):
-         label = myfont.render("Tie!!!", 1, (0, 255, 0))
-         screen.blit(label, (40, 10))
-         game_over = True
+            label = myfont.render("Tie!!!", 1, (0, 255, 0))
+            screen.blit(label, (40, 10))
+            game_over = True
         elif is_valid_location(board, col):
-            pygame.time.wait(700)
-            row = get_next_open_row(board, col)
-            drop_piece(board, row, col, AI_PIECE)
-            if wining_move(board, AI_PIECE):
+             pygame.time.wait(700)
+             row = get_next_open_row(board, col)
+             drop_piece(board, row, col, AI_PIECE)
+             turn = 0
+             if wining_move(board, AI_PIECE):
                 label = myfont.render("Player 2 Wins!!!", 1, (255, 255, 0))
                 screen.blit(label, (40, 10))
                 game_over = True
-      
-
-        turn = 0
-
         print_board(board)
         draw_board(board)
+
     if game_over:
         pygame.time.wait(3000)
